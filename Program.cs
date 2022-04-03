@@ -1,12 +1,13 @@
 ﻿using System;
-
+using System.IO;
+using System.Collections.Generic;
 namespace KPEditor
 {
-    internal class Program
+    class Program
     {
-        static void Main(string[] args)
+        public static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            
         }
     }
 }
