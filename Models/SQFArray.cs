@@ -40,7 +40,12 @@ namespace KPEditor.Models
         }
         public void RemoveLast()
         {
+            if (this.Entries.Last() != null)
             this.Entries.RemoveAt(this.Entries.Count() - 1);
+        }
+        public bool IsEmpty()
+        {
+            return this.Count() == 0;
         }
 
         public void Input(string Introduction = "")
@@ -95,7 +100,10 @@ namespace KPEditor.Models
             {
                 contents += $"\t\"{this.Entries[i]}\",\n";
             }
-            contents += $"\t\"{this.Entries[this.Entries.Count - 1]}\"\n";
+            if (this.Entries.Count > 0)
+            {
+                contents += $"\t\"{this.Entries[this.Entries.Count - 1]}\"\n";
+            }
             contents += $"];";
             return contents;
         }

@@ -23,6 +23,12 @@ namespace KPEditor.Builder.OPFOR
                 OPFORFaction.VehiclesLowIntensity.Input("Please add your Low Alert Vehicle entries");
                 return false;
             });
+            menu.Add("Planes", x =>
+            {
+                Console.Clear();
+                OPFORFaction.Planes.Input("Please add your Plane entries");
+                return false;
+            });
             menu.Draw();
         }
     }

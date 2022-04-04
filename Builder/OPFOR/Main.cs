@@ -37,7 +37,13 @@ namespace KPEditor.Builder.OPFOR
                 Battlegroup.Draw(OPFORFaction);
                 return false;
             });
-            menu.Add("Rename", (x) =>
+            menu.Add("Secondary Objective", (x) =>
+            {
+                Console.Clear();
+                SecondaryObjectives.Draw(OPFORFaction);
+                return false;
+            });
+            menu.Add("Rename Faction", (x) =>
             {
                 Console.Clear();
                 Rename.Draw(OPFORFaction);

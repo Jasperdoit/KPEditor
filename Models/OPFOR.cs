@@ -19,6 +19,7 @@ namespace KPEditor.Models
         public SQFArray TroupTransport;
         public SQFArray Choppers;
         public SQFArray Planes;
+        public List<SQFEntry> SecondaryObjectives;
 
         public void InfantryListBuilder()
         {
@@ -53,6 +54,17 @@ namespace KPEditor.Models
             this.TroupTransport = new SQFArray("opfor_troup_transports");
             this.Choppers = new SQFArray("opfor_choppers");
             this.Planes = new SQFArray("opfor_air");
+            this.SecondaryObjectives = new List<SQFEntry>();
+                this.SecondaryObjectives.Add(new SQFEntry("opfor_mrap", "O_MRAP_02_F"));
+                this.SecondaryObjectives.Add(new SQFEntry("opfor_mrap_armed", "O_MRAP_02_hmg_F"));
+                this.SecondaryObjectives.Add(new SQFEntry("opfor_transport_helo", "O_Heli_Transport_04_bench_F"));
+                this.SecondaryObjectives.Add(new SQFEntry("opfor_transport_truck", "O_Truck_03_covered_F"));
+                this.SecondaryObjectives.Add(new SQFEntry("opfor_ammobox_transport", "O_Truck_03_transport_F"));
+                this.SecondaryObjectives.Add(new SQFEntry("opfor_fuel_truck", "O_Truck_03_fuel_F"));
+                this.SecondaryObjectives.Add(new SQFEntry("opfor_ammo_truck", "O_Truck_03_ammo_F"));
+                this.SecondaryObjectives.Add(new SQFEntry("opfor_fuel_container", "Land_Pod_Heli_Transport_04_fuel_F"));
+                this.SecondaryObjectives.Add(new SQFEntry("opfor_ammo_container", "Land_Pod_Heli_Transport_04_ammo_F"));
+                this.SecondaryObjectives.Add(new SQFEntry("opfor_flag", "Flag_CSAT_F"));
         }
     }
 }
