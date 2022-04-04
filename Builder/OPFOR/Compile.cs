@@ -4,9 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KPEditor.Builder
+namespace KPEditor.Builder.OPFOR
 {
-    class OPFOR
+    class Compile
     {
+        public static void Draw(Models.OPFOR OPFORFaction)
+        {
+
+        }
     }
 }

@@ -10,8 +10,14 @@ namespace KPEditor.Menus
     {
         public static void DrawMenu()
         {
-            Console.WriteLine("This is the builder menu! Press any key to continue!");
-            Console.ReadKey();
+            Models.Menu menu = new Models.Menu("From this menu you can choose what kind of preset you wish to work on.");
+            menu.Add("OPFOR Faction", (x) =>
+            {
+                Console.Clear();
+                Builder.OPFOR.Main.Draw();
+                return false;
+            });
+            menu.Draw();
         }
     }
 }

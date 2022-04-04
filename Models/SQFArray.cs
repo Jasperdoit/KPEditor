@@ -34,6 +34,60 @@ namespace KPEditor.Models
                 this.Entries.Remove(Entry);
             }
         }
+        public int Count()
+        {
+            return this.Entries.Count();
+        }
+        public void RemoveLast()
+        {
+            this.Entries.RemoveAt(this.Entries.Count() - 1);
+        }
+
+        public void Input(string Introduction = "")
+        {
+            bool exit = false;
+            string input = "";
+            while (!exit)
+            {
+                Console.Clear();
+                if(Introduction != "")
+                {
+                    Console.WriteLine(Introduction);
+                }
+                Console.WriteLine("Write \"del\" if you wish to remove an entry.");
+                Console.WriteLine("Write \"clear\" to clear all entries.");
+                Console.WriteLine("Write \"back\" to go back to the previous menu.\n");
+                Console.Write(this.Name + " = [\n");
+                for (int i = 0; i < this.Count() - 1; i++)
+                {
+                    Console.WriteLine("\t\"" + this.Entries[i] + "\",");
+                }
+                if (this.Count() > 0)
+                {
+                    Console.WriteLine("\t\"" + this.Entries[this.Count() - 1] + "\"");
+
+                }
+                Console.Write("];\nYour input: ");
+                input = Console.ReadLine();
+                if (input.ToLower() == "back")
+                {
+                    exit = true;
+                }
+                else if (input.ToLower() == "del" && this.Count() > 0)
+                {
+                    this.RemoveLast();
+                }
+                else if (input.ToLower() == "clear" && this.Count() > 0)
+                {
+                    this.Entries.Clear();
+                }
+                else
+                {
+                    this.AddEntry(input);
+                }
+            }
+        }
+
         public string Compile()
         {
             string contents = $"{this.Name} = [\n";

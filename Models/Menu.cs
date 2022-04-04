@@ -10,17 +10,26 @@ namespace KPEditor.Models
     {
         public List<MenuOption> MenuOptions;
         public string Introduction;
-        public Menu(string Introduction = "")
+        public Menu(string Introduction = "", bool IsExit = false)
         {
             this.Introduction = Introduction;
             this.MenuOptions = new List<MenuOption>();
-            this.MenuOptions.Add(new MenuOption("Exit", (x) =>
+            if(IsExit)
             {
-                Environment.Exit(0);
-                return;
-            }));
+                this.MenuOptions.Add(new MenuOption("Exit", (x) =>
+                {
+                    return true;
+                }));
+            } else
+            {
+                this.MenuOptions.Add(new MenuOption("Back", (x) =>
+                {
+                    return true;
+                }));
+            }
+            
         }
-        public void Add(string Name, Action<string> Fun)
+        public void Add(string Name, Func<string, bool> Fun)
         {
             MenuOption temp = this.MenuOptions[this.MenuOptions.Count - 1];
             this.MenuOptions.RemoveAt(this.MenuOptions.Count - 1);
@@ -34,7 +43,7 @@ namespace KPEditor.Models
             do
             {
                 Console.Clear();
-                if(this.Introduction != "")
+                if (this.Introduction != "")
                 {
                     Console.WriteLine(Introduction + "\n");
                 }
@@ -47,7 +56,11 @@ namespace KPEditor.Models
 
                 input = Console.ReadLine();
 
-                if (int.TryParse(input, out int id) && id - 1 >= 0 && id - 1 < this.MenuOptions.Count)
+                if (int.TryParse(input, out int id) && id == MenuOptions.Count)
+                {
+                    exit = true;
+                }
+                else if (int.TryParse(input, out int id2) && id2 - 1 >= 0 && id2 - 1 < this.MenuOptions.Count)
                 {
                     this.MenuOptions[id - 1].Fun(id.ToString());
                 }
@@ -58,8 +71,8 @@ namespace KPEditor.Models
     class MenuOption
     {
         public string Name;
-        public Action<string> Fun;
-        public MenuOption(string Name, Action<string> Fun)
+        public Func<string, bool> Fun;
+        public MenuOption(string Name, Func<string, bool> Fun)
         {
             this.Name = Name;
             this.Fun = Fun;

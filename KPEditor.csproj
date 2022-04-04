@@ -6,7 +6,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Menu\" />
     <Folder Include="Tools\" />
   </ItemGroup>
 
