@@ -10,84 +10,172 @@ namespace KPEditor.Builder.OPFOR
     {
         public static void Draw(Models.OPFOR OPFORFaction)
         {
-            Input(OPFORFaction.BattlegroupVehicles);
+            Models.Menu menu = new Models.Menu("From this menu, you can change everything related to battlegroups\n" +
+                "Transport vehicles and helicopters should be in one of the battlegroup vehicle lists.");
+            menu.Add("High Alert Battlegroup Vehicles", x =>
+            {
+                Console.Clear();
+                OPFORFaction.BattlegroupVehicles.Input("Please fill in your High Alert Battlegroup entries.");
+                return false;
+            });
+            menu.Add("Low Alert Battlegroup Vehicles", x =>
+            {
+                Console.Clear();
+                OPFORFaction.BattlegroupVehiclesLowIntensity.Input("Please fill in your Low Alert Battlegroup entries.");
+                return false;
+            });
+            menu.Add("Assign Transport", x =>
+            {
+                Console.Clear();
+                AssignTransport(OPFORFaction);
+                return false;
+            });
+            menu.Add("Assign Helicopter", x =>
+            {
+                Console.Clear();
+                AssignChopper(OPFORFaction);
+                return false;
+            });
+            menu.Draw();
         }
-
-        public static void Input(Models.SQFArray SQFArray, string Introduction = "")
+        public static void AssignTransport(Models.OPFOR OPFORFaction)
         {
             bool exit = false;
-            string input = "";
-            int CursorPosition = 0;
+            List<string> AvailableVehicles = new List<string>();
+            int CursorPos = 0;
+            foreach(var vehicle in OPFORFaction.BattlegroupVehicles.Entries)
+            {
+                if(!AvailableVehicles.Contains(vehicle)) AvailableVehicles.Add(vehicle);
+            }
+            foreach (var vehicle in OPFORFaction.BattlegroupVehiclesLowIntensity.Entries)
+            {
+                if (!AvailableVehicles.Contains(vehicle)) AvailableVehicles.Add(vehicle);
+            }
             while (!exit)
             {
-                // Needs work
                 Console.Clear();
-                if (Introduction != "")
+                Console.WriteLine("Please select the vehicles to add as transport vehicles.\n");
+                for(int i = 0; i < AvailableVehicles.Count; i++)
                 {
-                    Console.WriteLine(Introduction);
-                }
-                Console.WriteLine("Write \"del\" if you wish to remove an entry.");
-                Console.WriteLine("Write \"clear\" to clear all entries.");
-                Console.WriteLine("Write \"back\" to go back to the previous menu.\n");
-                Console.Write(SQFArray.Name + " = [\n");
-                for (int i = 0; i < SQFArray.Count() - 1; i++)
-                {
-                    Console.ForegroundColor = ConsoleColor.White;
-                    if(i == CursorPosition) Console.ForegroundColor = ConsoleColor.Yellow;
-                    Console.WriteLine("\t\"" + SQFArray.Entries[i] + "\",");
-                }
-                if (SQFArray.Count() > 0)
-                {
-                    if (CursorPosition == 0) Console.ForegroundColor = ConsoleColor.Yellow;
-                    Console.WriteLine("\t\"" + SQFArray.Entries[SQFArray.Count() - 1] + "\"");
-
-                }
-                Console.Write("];\nYour input: ");
-                ConsoleKeyInfo key = Console.ReadKey();
-                bool EnterPressed = false;
-                while(!EnterPressed)
-                {
-                    if (key.Key == ConsoleKey.Backspace)
+                    if(i == CursorPos && OPFORFaction.TroupTransport.Entries.Contains(AvailableVehicles[i]))
                     {
-                        input = input.Substring(0, input.Length - 1);
-                    } else if (key.Key == ConsoleKey.Enter)
+                        Console.ForegroundColor = ConsoleColor.Green;
+                        Console.BackgroundColor = ConsoleColor.White;
+                    } else if (i == CursorPos)
                     {
-                        EnterPressed = true;
-                    } else if (key.Key == ConsoleKey.UpArrow)
-                    {
-                        CursorPosition += 1;
-
-                    } else if (key.Key == ConsoleKey.DownArrow)
-                    {
-                        CursorPosition -= 1;
-                    } else if (key.Key == ConsoleKey.LeftArrow)
-                    {
-
-                    } else if (key.Key != ConsoleKey.Enter)
-                    {
-                        input += key.ToString();
+                        Console.ForegroundColor = ConsoleColor.Black;
+                        Console.BackgroundColor = ConsoleColor.White;
                     }
-                    Console.Write("/r" + input);
+                    else if (OPFORFaction.TroupTransport.Entries.Contains(AvailableVehicles[i]))
+                    {
+                        Console.ForegroundColor = ConsoleColor.DarkGreen;
+                        Console.BackgroundColor = ConsoleColor.Black;
+                    } else
+                    {
+                        Console.ForegroundColor = ConsoleColor.White;
+                        Console.BackgroundColor = ConsoleColor.Black;
+                    }
+                    Console.WriteLine(AvailableVehicles[i]);
                 }
-                
-                // input = Console.ReadLine();
-                if (input.ToLower() == "back")
+                Console.ForegroundColor = ConsoleColor.White;
+                Console.BackgroundColor = ConsoleColor.Black;
+                ConsoleKeyInfo key = Console.ReadKey();
+                if (key.Key == ConsoleKey.Escape || key.Key == ConsoleKey.Backspace)
+                {
+                    exit = true;
+                } 
+                else if (key.Key == ConsoleKey.Enter && CursorPos >= 0 && CursorPos < AvailableVehicles.Count)
+                {
+                    if(OPFORFaction.TroupTransport.Entries.Contains(AvailableVehicles[CursorPos]))
+                    {
+                        OPFORFaction.TroupTransport.RemoveEntry(AvailableVehicles[CursorPos]);
+                    }
+                    else
+                    {
+                        OPFORFaction.TroupTransport.AddEntry(AvailableVehicles[CursorPos]);
+                    }
+                }
+                else if (key.Key >= ConsoleKey.DownArrow && CursorPos + 1 >= 0 && CursorPos + 1 < AvailableVehicles.Count)
+                {
+                    CursorPos += 1;
+                }
+                else if (key.Key == ConsoleKey.UpArrow && CursorPos - 1 >= 0 && CursorPos - 1 < AvailableVehicles.Count)
+                {
+                    CursorPos -= 1;
+                }
+
+            }
+        }
+        public static void AssignChopper(Models.OPFOR OPFORFaction)
+        {
+            bool exit = false;
+            List<string> AvailableVehicles = new List<string>();
+            int CursorPos = 0;
+            foreach (var vehicle in OPFORFaction.BattlegroupVehicles.Entries)
+            {
+                if (!AvailableVehicles.Contains(vehicle)) AvailableVehicles.Add(vehicle);
+            }
+            foreach (var vehicle in OPFORFaction.BattlegroupVehiclesLowIntensity.Entries)
+            {
+                if (!AvailableVehicles.Contains(vehicle)) AvailableVehicles.Add(vehicle);
+            }
+            while (!exit)
+            {
+                Console.Clear();
+                Console.WriteLine("Please select the vehicles to add as a helicopter.\n");
+                for (int i = 0; i < AvailableVehicles.Count; i++)
+                {
+                    if (i == CursorPos && OPFORFaction.Choppers.Entries.Contains(AvailableVehicles[i]))
+                    {
+                        Console.ForegroundColor = ConsoleColor.Green;
+                        Console.BackgroundColor = ConsoleColor.White;
+                    }
+                    else if (i == CursorPos)
+                    {
+                        Console.ForegroundColor = ConsoleColor.Black;
+                        Console.BackgroundColor = ConsoleColor.White;
+                    }
+                    else if (OPFORFaction.Choppers.Entries.Contains(AvailableVehicles[i]))
+                    {
+                        Console.ForegroundColor = ConsoleColor.DarkGreen;
+                        Console.BackgroundColor = ConsoleColor.Black;
+                    }
+                    else
+                    {
+                        Console.ForegroundColor = ConsoleColor.White;
+                        Console.BackgroundColor = ConsoleColor.Black;
+                    }
+                    Console.WriteLine(AvailableVehicles[i]);
+                }
+                Console.ForegroundColor = ConsoleColor.White;
+                Console.BackgroundColor = ConsoleColor.Black;
+                ConsoleKeyInfo key = Console.ReadKey();
+                if (key.Key == ConsoleKey.Escape || key.Key == ConsoleKey.Backspace)
                 {
                     exit = true;
                 }
-                else if (input.ToLower() == "del" && SQFArray.Count() > 0)
+                else if (key.Key == ConsoleKey.Enter && CursorPos >= 0 && CursorPos < AvailableVehicles.Count)
                 {
-                    SQFArray.RemoveLast();
+                    if (OPFORFaction.Choppers.Entries.Contains(AvailableVehicles[CursorPos]))
+                    {
+                        OPFORFaction.Choppers.RemoveEntry(AvailableVehicles[CursorPos]);
+                    }
+                    else
+                    {
+                        OPFORFaction.Choppers.AddEntry(AvailableVehicles[CursorPos]);
+                    }
                 }
-                else if (input.ToLower() == "clear" && SQFArray.Count() > 0)
+                else if (key.Key >= ConsoleKey.DownArrow && CursorPos + 1 >= 0 && CursorPos + 1 < AvailableVehicles.Count)
                 {
-                    SQFArray.Entries.Clear();
+                    CursorPos += 1;
                 }
-                else
+                else if (key.Key == ConsoleKey.UpArrow && CursorPos - 1 >= 0 && CursorPos - 1 < AvailableVehicles.Count)
                 {
-                    SQFArray.AddEntry(input);
+                    CursorPos -= 1;
                 }
+
             }
         }
+
     }
 }
