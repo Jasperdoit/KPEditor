@@ -21,7 +21,7 @@ namespace KPEditor.Models
         }
         public string Compile()
         {
-            return $"{this.Type} = {this.Classname};";
+            return $"{this.Type} = \"{this.Classname}\";";
         }
     }
 }

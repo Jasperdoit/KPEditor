@@ -8,9 +8,26 @@ namespace KPEditor.Builder.OPFOR
 {
     class Main
     {
+        public static void SelectMode()
+        {
+            Models.Menu menu = new Models.Menu("Please select an implementation mode.\n" +
+                "\"Express Mode\" will go through every required item.\n");
+            menu.Add("Express Mode", x =>
+            {
+                Express.Draw();
+                return false;
+            });
+            menu.Add("Menu Mode", x =>
+            {
+                Draw();
+                return false;
+            });
+            menu.Draw();
+
+        }
         public static void Draw()
         {
-            // Add rename capabilities!!!
+            Console.Clear();
             string input = "";
             do
             {
@@ -19,6 +36,12 @@ namespace KPEditor.Builder.OPFOR
             } while (input == "" && input.Contains(" "));
             Models.OPFOR OPFORFaction = new Models.OPFOR(input);
             Models.Menu menu = new Models.Menu("From this menu you can select what you want to edit for a new faction!");
+            menu.Add("Express Mode", (x) =>
+            {
+                Console.Clear();
+                Express.Draw();
+                return false;
+            });
             menu.Add("Military", (x) =>
             {
                 Console.Clear();

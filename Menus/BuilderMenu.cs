@@ -14,7 +14,7 @@ namespace KPEditor.Menus
             menu.Add("OPFOR Faction", (x) =>
             {
                 Console.Clear();
-                Builder.OPFOR.Main.Draw();
+                Builder.OPFOR.Main.SelectMode();
                 return false;
             });
             menu.Draw();

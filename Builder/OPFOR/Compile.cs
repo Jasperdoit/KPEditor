@@ -43,18 +43,20 @@ namespace KPEditor.Builder.OPFOR
                 {
                     Console.WriteLine("WARNING! THE FOLLOWING FIELDS HAVE NOT BEEN SET:");
                     Console.WriteLine(IncompleteModules);
-                    Console.WriteLine("ALTHOUGH, IT IS STILL POSSIBLE TO COMPILE THE FACTION IN THIS STATE," +
-                        "IT MAY RESULT IN THE FACTION NOT LOADING IN-GAME. PLEASE MAKE SURE THAT ALL THE FIELDS" +
-                        "HAVE BEEN SET UP CORRECTLY.\n");
+                    Console.WriteLine("ALL FIELDS MUST BE FILLED OUT BEFORE A FACTION FILE\n" +
+                        "MAY BE COMPILED!\n" +
+                        "Press any key to continue");
+                    Console.ReadKey();
+                    return;
                 }
-                Console.WriteLine("Are you sure you want to compile the Faction?");
+                Console.WriteLine("Are you sure you want to compile the Faction? (y/n)");
                 ConsoleKeyInfo input = Console.ReadKey();
                 if(input.Key == ConsoleKey.Y)
                 {
                     CompileFaction(OPFORFaction);
-                    Console.WriteLine($"{OPFORFaction.FileName}.sqf has been exported.\n" +
-                        $"Do note that if you had a custom opfor_ammobox_transport, you will need" +
-                        $"to set the positions for the crates for this vehicle inside the config file." +
+                    Console.WriteLine($"\r{OPFORFaction.FileName}.sqf has been exported.\n" +
+                        $"Do note that if you had a custom opfor_ammobox_transport, you will need\n" +
+                        $"to set the positions for the crates for this vehicle inside the config file.\n" +
                         $"Press any key to continue.");
                     Console.ReadKey();
                     exit = true;
